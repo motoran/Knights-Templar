@@ -11,6 +11,11 @@ using System.IO;
 public class ScreenShot : MonoBehaviour
 {
     private string _fileName = "";
+    public GameObject ar_view_pannel;
+    public GameObject bottmNavigationBar;
+    public GameObject screenShotButton;
+
+
     void Start()
     {
     }
@@ -21,8 +26,21 @@ public class ScreenShot : MonoBehaviour
 
     public void OnClick()
     {
+        ar_view_pannel.SetActive(false);
+        bottmNavigationBar.SetActive(false);
+        screenShotButton.SetActive(false);
         StartCoroutine(WriteFileProcess());
+        Invoke("SetScreenActiv", 1.0f);
     }
+
+    private void SetScreenActiv()
+    {
+        ar_view_pannel.SetActive(true);
+        bottmNavigationBar.SetActive(true);
+        screenShotButton.SetActive(true);
+
+    }
+
 
 
     private IEnumerator WriteFileProcess()
