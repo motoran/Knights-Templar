@@ -6,7 +6,7 @@ using System;
 using System.IO;
 
 
-//引用 : https://qiita.com/fukaken5050/items/9619aeeb131120939bc1
+//参考 : https://qiita.com/fukaken5050/items/9619aeeb131120939bc1
 
 public class ScreenShot : MonoBehaviour
 {
@@ -30,10 +30,10 @@ public class ScreenShot : MonoBehaviour
         bottmNavigationBar.SetActive(false);
         screenShotButton.SetActive(false);
         StartCoroutine(WriteFileProcess());
-        Invoke("SetScreenActiv", 1.0f);
+        Invoke("SetScreenActive", 1.0f);
     }
 
-    private void SetScreenActiv()
+    private void SetScreenActive()
     {
         ar_view_pannel.SetActive(true);
         bottmNavigationBar.SetActive(true);
