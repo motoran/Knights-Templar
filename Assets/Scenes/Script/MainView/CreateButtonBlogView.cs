@@ -1,21 +1,31 @@
-﻿using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using System.Diagnostics;
+using System.Dynamic;
 
-public class CreateButtonBlogView : MonoBehaviour
+public class MemberData
 {
-    public GameObject obj;
-    public Transform parent;
-    private GameObject[] member = new GameObject[11];
+    public int getNumberOfMember()
+    {
+        return (int)MemberLineUp.num;
+    }
 
-    private static string url_head = "http://www.nanabunnonijyuuni.com/assets/img/blog/thumb_photo/thumb_";
-    private string url_bottom;
-    private string Image_url;
+    public string getMemberName(int num)
+    {
+        return MemberName[num];
+    }
 
-    private enum MemberName: int
+    public string getMemberImageURL(int num)
+    {
+        return "http://www.nanabunnonijyuuni.com/assets/img/blog/thumb_photo/thumb_" + Enum.GetName(typeof(MemberLineUp), num) + ".png";
+    }
+
+    private enum MemberLineUp
     {
         amaki,
         umino,
@@ -27,10 +37,11 @@ public class CreateButtonBlogView : MonoBehaviour
         takatsuji,
         takeda,
         hokaze,
-        miyase
+        miyase,
+        num = 11
     }
 
-    private enum MemberSource: int
+    private enum MemberSource
     {
         amaki = 1,
         umino,
@@ -43,64 +54,41 @@ public class CreateButtonBlogView : MonoBehaviour
         suzuhana,
         takatsuji,
         takeda,
-        kawase
+        kawase,
+        num = 13
     }
+    
+    private string[] MemberName = { "天城サリー", "海乃るり", "河瀬詩", "倉岡水巴", "西條和", "白沢かなえ", "涼花萌", "高辻麗", "武田愛奈", "帆風千春", "宮瀬玲奈" };
+}
+
+public class CreateButtonBlogView : MonoBehaviour
+{
+    public GameObject Obj;
+    public Transform Parent;
+    private GameObject[] BlogButton = new GameObject[11];
 
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        MemberData memberdata = new MemberData();
+
         // プレハブを元にオブジェクトを生成する
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < memberdata.getNumberOfMember() ; i++)
         {
-            url_bottom = "amaki";
+            BlogButton[i] = (GameObject)Instantiate(Obj);
+            BlogButton[i].transform.Find("Text").GetComponent<Text>().text = memberdata.getMemberName(i);
 
-            member[i] = (GameObject)Instantiate(obj);
-            member[i].transform.Find("Text").GetComponent<Text>().text = i.ToString();
-            switch (i)
-            {
-                case (int)MemberName.amaki:
-                    url_bottom = "amaki"; 
-                    break;
-                case (int)MemberName.umino:
-                    url_bottom = "umino";
-                    break;
-                case (int)MemberName.kawase:
-                    url_bottom = "umino";
-                    break;
-                case (int)MemberName.kuraoka:
-                    break;
-                case (int)MemberName.saijo:
-                    break;
-                case (int)MemberName.shirosawa:
-                    break;
-                case (int)MemberName.suzuhana:
-                    break;
-                case (int)MemberName.takatsuji:
-                    break;
-                case (int)MemberName.takeda:
-                    break;
-                case (int)MemberName.hokaze:
-                    break;
-                case (int)MemberName.miyase:
-                    break;
-                default:
-                    break;
-            }
-
-            Image_url = url_head + url_bottom + ".png";
-
-            WWW webImage = new WWW(Image_url);
+            // wwwクラスのコンストラクタに画像URLを指定
+            WWW WebImage = new WWW(memberdata.getMemberImageURL(i));
 
             // 画像ダウンロード完了を待機
-            yield return webImage;
+            yield return WebImage;
 
             // webサーバから取得した画像をRaw Imagで表示する
-            member[i].GetComponent<RawImage>().texture = webImage.textureNonReadable;
-
-            member[i].transform.SetParent(parent);
+            BlogButton[i].GetComponent<RawImage>().texture = WebImage.textureNonReadable;
+            
+            BlogButton[i].transform.SetParent(Parent);
         }
-
-
     }
 
     // Update is called once per frame
@@ -109,3 +97,4 @@ public class CreateButtonBlogView : MonoBehaviour
 
     }
 }
+
