@@ -6,11 +6,16 @@ using System;
 using System.IO;
 
 
-//引用 : https://qiita.com/fukaken5050/items/9619aeeb131120939bc1
+//参考 : https://qiita.com/fukaken5050/items/9619aeeb131120939bc1
 
 public class ScreenShot : MonoBehaviour
 {
     private string _fileName = "";
+    public GameObject ar_view_pannel;
+    public GameObject bottmNavigationBar;
+    public GameObject screenShotButton;
+
+
     void Start()
     {
     }
@@ -21,8 +26,21 @@ public class ScreenShot : MonoBehaviour
 
     public void OnClick()
     {
+        ar_view_pannel.SetActive(false);
+        bottmNavigationBar.SetActive(false);
+        screenShotButton.SetActive(false);
         StartCoroutine(WriteFileProcess());
+        Invoke("SetScreenActive", 1.0f);
     }
+
+    private void SetScreenActive()
+    {
+        ar_view_pannel.SetActive(true);
+        bottmNavigationBar.SetActive(true);
+        screenShotButton.SetActive(true);
+
+    }
+
 
 
     private IEnumerator WriteFileProcess()

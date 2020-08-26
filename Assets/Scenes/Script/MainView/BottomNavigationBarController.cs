@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class BottomNavigationBarController : MonoBehaviour
 {
     private GameObject[] view;
+    public GameObject arCam;
+    public GameObject mainCam;
 
     private string[] viewType =
     {
@@ -21,6 +23,7 @@ public class BottomNavigationBarController : MonoBehaviour
     {
         view = GameObject.FindGameObjectsWithTag("View");
         ScreenTransition(viewType[0]);
+        arCam.SetActive(false);
     }
 
     // Update is called once per frame
@@ -40,6 +43,8 @@ public class BottomNavigationBarController : MonoBehaviour
 
     public void OnClick(int num)
     {
+        arCam.SetActive(num == 1);
+        mainCam.SetActive(num != 1);
         ScreenTransition(viewType[num]);
     }
 
