@@ -8,10 +8,12 @@ public class SampleLocationService : MonoBehaviour
 {
     IEnumerator Start()
     {
+        Input.location.Start();
         // 最初に、ユーザーがロケーションサービスを有効にしているかを確認する。無効の場合は終了する
         if (!Input.location.isEnabledByUser)
         {
             print("Permission Failed");
+            //Input.location.Start();
             yield break;
         }
         
