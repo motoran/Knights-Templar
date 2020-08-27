@@ -6,20 +6,26 @@ using UnityEngine.UI;
 
 public class SampleLocationService : MonoBehaviour
 {
+    public Text locationInformationText;
     IEnumerator Start()
     {
+        // Androidの場合、位置情報取得許可がされていない場合、この処理でダイアログが出る
         Input.location.Start();
-        // 最初に、ユーザーがロケーションサービスを有効にしているかを確認する。無効の場合は終了する
+
+        // Userが位置情報取得を拒否した場合
         if (!Input.location.isEnabledByUser)
         {
-            print("Permission Failed");
-            //Input.location.Start();
+            locationInformationText.text = "位置情報の取得が許可されていません";
             yield break;
         }
         
-        // 位置を取得する前にロケーションサービスを開始する
-        Input.location.Start();
-
+        // 位置情報取得を許可した瞬間はlocation serviceの稼働状態がStoppedのままの場合があるため以下で再度動かす
+        // https://qiita.com/hirano/items/dde92f4ed76fb377746e#android-2
+        if (Input.location.status == LocationServiceStatus.Stopped)
+        {
+            Input.location.Start();
+        }
+    
         // 初期化が終了するまで待つ
         int maxWait = 20; // タイムアウトは20秒
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
@@ -31,24 +37,21 @@ public class SampleLocationService : MonoBehaviour
         // サービスの開始がタイムアウトしたら（20秒以内に起動しなかったら）、終了
         if (maxWait < 1)
         {
-            print("Timed out");
+            locationInformationText.text = "タイムアウトによる位置情報取得エラー";
             yield break;
         }
 
         // サービスの開始に失敗したら終了
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            print("Unable to determine device location");
+            locationInformationText.text = "何かしらの理由による位置情報取得エラー";
             yield break;
         }
         else
         {
             // アクセスの許可と位置情報の取得に成功
-            print("Location: " + Input.location.lastData.latitude + " "
-                               + Input.location.lastData.longitude + " "
-                               + Input.location.lastData.altitude + " "
-                               + Input.location.lastData.horizontalAccuracy + " "
-                               + Input.location.lastData.timestamp);
+            locationInformationText.text = "緯度" + Input.location.lastData.latitude + 
+                                           "経度" + Input.location.lastData.longitude;
         }
 
         // 位置の更新を継続的に取得する必要がない場合はサービスを停止する
