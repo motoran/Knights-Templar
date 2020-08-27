@@ -2,11 +2,11 @@
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Dynamic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
-using System.Diagnostics;
-using System.Dynamic;
 
 public class MemberData
 {
@@ -77,13 +77,19 @@ public class CreateButtonBlogView : MonoBehaviour
             BlogButton[i].transform.Find("MemberName").GetComponent<Text>().text = memberdata.getMemberName(i);
 
             // wwwクラスのコンストラクタに画像URLを指定
-            WWW WebImage = new WWW(memberdata.getMemberImageURL(i));
+            UnityWebRequest WebImage = UnityWebRequestTexture.GetTexture(memberdata.getMemberImageURL(i));
+            //WWW WebImage = new WWW(memberdata.getMemberImageURL(i));
 
             // 画像ダウンロード完了を待機
-            yield return WebImage;
+            yield return WebImage.SendWebRequest();
+
+            if (WebImage.isNetworkError || WebImage.isHttpError)
+            {
+                print(WebImage.error);
+            }
 
             // webサーバから取得した画像をRaw Imagで表示する
-            BlogButton[i].GetComponent<RawImage>().texture = WebImage.textureNonReadable;
+            BlogButton[i].GetComponent<RawImage>().texture = ((DownloadHandlerTexture)WebImage.downloadHandler).texture;
         }
     }
 
