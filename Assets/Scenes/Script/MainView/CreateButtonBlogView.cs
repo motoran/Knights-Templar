@@ -74,7 +74,7 @@ public class CreateButtonBlogView : MonoBehaviour
         // プレハブを元にオブジェクトを生成する
         for (int i = 0; i < memberdata.getNumberOfMember() ; i++)
         {
-            BlogButton[i].transform.Find("Text").GetComponent<Text>().text = memberdata.getMemberName(i);
+            BlogButton[i].transform.Find("MemberName").GetComponent<Text>().text = memberdata.getMemberName(i);
 
             // wwwクラスのコンストラクタに画像URLを指定
             WWW WebImage = new WWW(memberdata.getMemberImageURL(i));
