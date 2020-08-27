@@ -63,20 +63,18 @@ public class MemberData
 
 public class CreateButtonBlogView : MonoBehaviour
 {
-    public GameObject Obj;
-    public Transform Parent;
-    private GameObject[] BlogButton = new GameObject[11];
+    private GameObject[] BlogButton;
 
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        BlogButton = GameObject.FindGameObjectsWithTag("Blog_Button");
         MemberData memberdata = new MemberData();
 
         // プレハブを元にオブジェクトを生成する
         for (int i = 0; i < memberdata.getNumberOfMember() ; i++)
         {
-            BlogButton[i] = (GameObject)Instantiate(Obj);
-            BlogButton[i].transform.Find("Text").GetComponent<Text>().text = memberdata.getMemberName(i);
+            BlogButton[i].transform.Find("MemberName").GetComponent<Text>().text = memberdata.getMemberName(i);
 
             // wwwクラスのコンストラクタに画像URLを指定
             WWW WebImage = new WWW(memberdata.getMemberImageURL(i));
@@ -86,8 +84,6 @@ public class CreateButtonBlogView : MonoBehaviour
 
             // webサーバから取得した画像をRaw Imagで表示する
             BlogButton[i].GetComponent<RawImage>().texture = WebImage.textureNonReadable;
-            
-            BlogButton[i].transform.SetParent(Parent);
         }
     }
 
