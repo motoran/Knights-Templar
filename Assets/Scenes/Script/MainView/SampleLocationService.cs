@@ -61,7 +61,7 @@ public class SampleLocationService : MonoBehaviour
         var prefecture = result["prefecture"] as IDictionary;
         var municipality = result["municipality"] as IDictionary;
         string currentPosition = prefecture["pname"] as string + municipality["mname"] as string;
-        
+        locationInformationText.text = currentPosition;
         // 位置の更新を継続的に取得する必要がない場合はサービスを停止する
         Input.location.Stop();
     }
