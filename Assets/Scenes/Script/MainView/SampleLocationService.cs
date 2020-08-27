@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using MiniJSON;
 
@@ -55,13 +56,23 @@ public class SampleLocationService : MonoBehaviour
                                            "経度" + Input.location.lastData.longitude;
         }
         
-        WWW results = new WWW("http://www.finds.jp/ws/rgeocode.php?json&lat=" + Input.location.lastData.latitude + "&lon=" + Input.location.lastData.longitude); 
-        var search  = Json.Deserialize(results.text) as IDictionary;
-        var result = search["result"] as IDictionary;
-        var prefecture = result["prefecture"] as IDictionary;
-        var municipality = result["municipality"] as IDictionary;
-        string currentPosition = prefecture["pname"] as string + municipality["mname"] as string;
-        locationInformationText.text = currentPosition;
+        string url = "http://www.finds.jp/ws/rgeocode.php?json&lat=" + Input.location.lastData.latitude + "&lon=" + Input.location.lastData.longitude;
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+        if (request.isNetworkError || request.isHttpError)
+        {
+            // エラーが起きた場合はエラー内容を表示
+            print(request.error);
+        }
+        else
+        {
+            // レスポンスをテキストで表示
+            locationInformationText.text = request.downloadHandler.text;
+            // もし画像データなどの場合はバイトデータとして受け取る
+            byte[] results = request.downloadHandler.data;
+        }
+
         // 位置の更新を継続的に取得する必要がない場合はサービスを停止する
         Input.location.Stop();
     }
