@@ -67,12 +67,14 @@ public class SampleLocationService : MonoBehaviour
         }
         else
         {
+            var result_json = Json.Deserialize(request.downloadHandler.text) as Dictionary<string, object>;
+            string muniCd = (string)result_json["muniCd"];
+            string lv01Nm = (string)result_json["lv01Nm"];
             // レスポンスをテキストで表示
-            locationInformationText.text = request.downloadHandler.text;
+            locationInformationText.text = muniCd+lv01Nm;
             // もし画像データなどの場合はバイトデータとして受け取る
             byte[] results = request.downloadHandler.data;
         }
-        locationInformationText.text = request.downloadHandler.text;
         // 位置の更新を継続的に取得する必要がない場合はサービスを停止する
         Input.location.Stop();
     }
