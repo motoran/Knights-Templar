@@ -1,19 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using MiniJSON;
+using muniCdAdapter;
 
 public class SampleLocationService : MonoBehaviour
 {
+    [Serializable]
+    public class LocationResult
+    {
+        public LocationInfo results;
+    }
+
+    [Serializable]
+    public class LocationInfo
+    {
+        public string muniCd;
+        public string lv01Nm;
+    }
     public Text locationInformationText;
     IEnumerator Start()
     {
         // Androidの場合、位置情報取得許可がされていない場合、この処理でダイアログが出る
         Input.location.Start();
-     
+
         // Userが位置情報取得を拒否した場合
         if (!Input.location.isEnabledByUser)
         {
@@ -49,12 +62,6 @@ public class SampleLocationService : MonoBehaviour
             locationInformationText.text = "何かしらの理由による位置情報取得エラー";
             yield break;
         }
-        else
-        {
-            // アクセスの許可と位置情報の取得に成功
-            locationInformationText.text = "緯度" + Input.location.lastData.latitude + 
-                                           "経度" + Input.location.lastData.longitude;
-        }
 
         string url = "https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=" + Input.location.lastData.latitude + "&lon=" + Input.location.lastData.longitude;
         UnityWebRequest request = UnityWebRequest.Get(url);
@@ -63,17 +70,17 @@ public class SampleLocationService : MonoBehaviour
         if (request.isNetworkError || request.isHttpError)
         {
             // エラーが起きた場合はエラー内容を表示
-            print(request.error);
+            locationInformationText.text = "hogehogeな訳がねぇ";
         }
         else
         {
-            var result_json = Json.Deserialize(request.downloadHandler.text) as Dictionary<string, object>;
-            string muniCd = (string)result_json["muniCd"];
-            string lv01Nm = (string)result_json["lv01Nm"];
+            LocationResult location_result = JsonUtility.FromJson<LocationResult>(request.downloadHandler.text);
+
+            string muniCd = Adapter.Convert_Code_Landname((string)location_result.results.muniCd);
+            string lv01Nm = (string)location_result.results.lv01Nm;
+            
             // レスポンスをテキストで表示
-            locationInformationText.text = muniCd+lv01Nm;
-            // もし画像データなどの場合はバイトデータとして受け取る
-            byte[] results = request.downloadHandler.data;
+            locationInformationText.text = muniCd + lv01Nm;
         }
         // 位置の更新を継続的に取得する必要がない場合はサービスを停止する
         Input.location.Stop();
