@@ -55,8 +55,8 @@ public class SampleLocationService : MonoBehaviour
             locationInformationText.text = "緯度" + Input.location.lastData.latitude + 
                                            "経度" + Input.location.lastData.longitude;
         }
-        
-        string url = "http://www.finds.jp/ws/rgeocode.php?json&lat=" + Input.location.lastData.latitude + "&lon=" + Input.location.lastData.longitude;
+
+        string url = "https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=" + Input.location.lastData.latitude + "&lon=" + Input.location.lastData.longitude;
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Content-Type", "application/json");
         yield return request.SendWebRequest();
@@ -72,7 +72,7 @@ public class SampleLocationService : MonoBehaviour
             // もし画像データなどの場合はバイトデータとして受け取る
             byte[] results = request.downloadHandler.data;
         }
-
+        locationInformationText.text = request.downloadHandler.text;
         // 位置の更新を継続的に取得する必要がない場合はサービスを停止する
         Input.location.Stop();
     }
