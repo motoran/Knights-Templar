@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//参考 https://qiita.com/Nakatomo/items/7a1491de39a94fa176b0
 public class MovableObject : MonoBehaviour
 {
 
