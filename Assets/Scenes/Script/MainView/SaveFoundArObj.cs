@@ -7,6 +7,8 @@ public class SaveFoundArObj : MonoBehaviour
 {
 
     public GameObject ArObj;
+    public GameObject getCollectionToast;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +29,21 @@ public class SaveFoundArObj : MonoBehaviour
         {
             PlayerPrefs.SetString(ArObj.name, ArObj.name);
             PlayerPrefs.Save();
+            GetCollectionToast();
         }
     }
+
+
+    public void GetCollectionToast()
+    {
+        getCollectionToast.SetActive(true);
+        Invoke("ToastSetActiveFalse", 2.0f);
+    }
+
+    private void ToastSetActiveFalse()
+    {
+        getCollectionToast.SetActive(false);
+    }
+
 
 }
