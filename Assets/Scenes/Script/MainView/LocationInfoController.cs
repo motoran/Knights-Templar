@@ -30,11 +30,6 @@ public class LocationInfoController : MonoBehaviour
         {
             // 位置情報取得許可が出されていない場合、この処理でダイアログを出すことが出来る
             Input.location.Start();
-            if (Input.location.isEnabledByUser == false)
-            {
-                locationInformationText.text = "位置情報取得が許可されていません";
-                yield break;
-            }
         }
 
         // 位置情報取得許可が得られた瞬間のStart処理はisEnabledByUserをtrueにするだけ
@@ -43,7 +38,7 @@ public class LocationInfoController : MonoBehaviour
         {
             Input.location.Start();
         }
-    
+
         int maxWait = 21;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
@@ -64,6 +59,12 @@ public class LocationInfoController : MonoBehaviour
             }
             yield return new WaitForSeconds(1);
             maxWait--;
+        }
+        
+        if (Input.location.isEnabledByUser == false)
+        {
+            locationInformationText.text = "位置情報取得が許可されていません";
+            yield break;
         }
 
         // サービスの開始がタイムアウトしたら（20秒以内に起動しなかったら）、終了
