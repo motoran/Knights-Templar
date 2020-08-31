@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using muniCdAdapter;
 
-public class SampleLocationService : MonoBehaviour
+public class LocationInfoController : MonoBehaviour
 {
     [Serializable]
     public class LocationResult
@@ -21,31 +21,48 @@ public class SampleLocationService : MonoBehaviour
         public string muniCd;
         public string lv01Nm;
     }
+
     public Text locationInformationText;
+
     IEnumerator Start()
     {
-        // Androidの場合、位置情報取得許可がされていない場合、この処理でダイアログが出る
-        Input.location.Start();
-
-        // Userが位置情報取得を拒否した場合
-        if (!Input.location.isEnabledByUser)
+        if (Input.location.isEnabledByUser == false)
         {
-            locationInformationText.text = "位置情報の取得が許可されていません";
-            yield break;
+            // 位置情報取得許可が出されていない場合、この処理でダイアログを出すことが出来る
+            Input.location.Start();
+            if (Input.location.isEnabledByUser == false)
+            {
+                locationInformationText.text = "位置情報取得が許可されていません";
+                yield break;
+            }
         }
-        
-        // 位置情報取得を許可した瞬間はlocation serviceの稼働状態がStoppedのままの場合があるため以下で再度動かす
+
+        // 位置情報取得許可が得られた瞬間のStart処理はisEnabledByUserをtrueにするだけ
         // https://qiita.com/hirano/items/dde92f4ed76fb377746e#android-2
         if (Input.location.status == LocationServiceStatus.Stopped)
         {
             Input.location.Start();
         }
     
-        // 初期化が終了するまで待つ
-        int maxWait = 20; // タイムアウトは20秒
+        int maxWait = 21;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            yield return new WaitForSeconds(1); // 1秒待つ
+            switch( maxWait%3 )
+            {
+                case 0:
+                    locationInformationText.text = "位置情報取得中.";
+                    break;
+                case 1:
+                    locationInformationText.text = "位置情報取得中..";
+                    break;
+                case 2:
+                    locationInformationText.text = "位置情報取得中...";
+                    break;
+                default:
+                    locationInformationText.text = "位置情報取得中";
+                    break;
+            }
+            yield return new WaitForSeconds(1);
             maxWait--;
         }
 
@@ -67,10 +84,10 @@ public class SampleLocationService : MonoBehaviour
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Content-Type", "application/json");
         yield return request.SendWebRequest();
+
         if (request.isNetworkError || request.isHttpError)
         {
-            // エラーが起きた場合はエラー内容を表示
-            locationInformationText.text = "hogehogeな訳がねぇ";
+            locationInformationText.text = "apiエラー";
         }
         else
         {
@@ -79,10 +96,10 @@ public class SampleLocationService : MonoBehaviour
             string muniCd = Adapter.Convert_Code_Landname((string)location_result.results.muniCd);
             string lv01Nm = (string)location_result.results.lv01Nm;
             
-            // レスポンスをテキストで表示
             locationInformationText.text = muniCd + lv01Nm;
         }
-        // 位置の更新を継続的に取得する必要がない場合はサービスを停止する
-        Input.location.Stop();
+
+        // 1分毎に位置情報更新
+        yield return new WaitForSeconds(60);
     }
 }
