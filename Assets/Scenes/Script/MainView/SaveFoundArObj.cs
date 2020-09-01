@@ -24,7 +24,6 @@ public class SaveFoundArObj : MonoBehaviour
 
     public void SaveArObj()
     {
-
         if (!PlayerPrefs.HasKey(ArObj.name))
         {
             PlayerPrefs.SetString(ArObj.name, ArObj.name);
