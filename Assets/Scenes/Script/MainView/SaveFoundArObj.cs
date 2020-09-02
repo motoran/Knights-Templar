@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SaveFoundArObj : MonoBehaviour
 {
 
     public GameObject ArObj;
+    public Text location;
+    public Text buttonText;
     public GameObject getCollectionToast;
+    public RawImage jito;
+    public Texture jitoImage;
 
 
     // Start is called before the first frame update
@@ -27,13 +32,14 @@ public class SaveFoundArObj : MonoBehaviour
         if (!PlayerPrefs.HasKey(ArObj.name))
         {
             PlayerPrefs.SetString(ArObj.name, ArObj.name);
+
+            string LocationInfo = location.text.ToString();
+            buttonText.text = LocationInfo;
+            PlayerPrefs.SetString("Location:" + ArObj.name, LocationInfo);
+
             PlayerPrefs.Save();
 
-            GameObject LocationInfoController = GameObject.Find("MainView_Canvas");
-            string LocationInfo = LocationInfoController.GetComponent<LocationInfoController>().LocationInfoGetter();
-            PlayerPrefs.SetString("Location", LocationInfo);
-            PlayerPrefs.Save();
-
+            jito.texture = jitoImage;
 
             GetCollectionToast();
         }

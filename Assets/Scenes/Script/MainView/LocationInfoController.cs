@@ -10,7 +10,9 @@ using muniCdAdapter;
 public class LocationInfoController : MonoBehaviour
 {
     public Text locationInformationText;
+    
     private String Location = "";
+
     [Serializable]
     public class LocationResult
     {
@@ -23,6 +25,7 @@ public class LocationInfoController : MonoBehaviour
         public string muniCd;
         public string lv01Nm;
     }
+
 
     IEnumerator Start()
     {
@@ -46,6 +49,7 @@ public class LocationInfoController : MonoBehaviour
             {
                 case 0:
                     locationInformationText.text = "位置情報取得中.";
+
                     break;
                 case 1:
                     locationInformationText.text = "位置情報取得中..";
@@ -108,6 +112,7 @@ public class LocationInfoController : MonoBehaviour
         // 1分毎に位置情報更新
         yield return new WaitForSeconds(60);
     }
+   
     public String LocationInfoGetter()
     {
         return Location;

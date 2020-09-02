@@ -7,7 +7,8 @@ public class CreateCollectionList : MonoBehaviour
 {
 
     private GameObject[] ArObj;
-    public Text text;
+    public Text name;
+    public Text location;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,8 @@ public class CreateCollectionList : MonoBehaviour
         {
             if (PlayerPrefs.HasKey(view.name))
             {
-                text.text = PlayerPrefs.GetString(view.name);
+                name.text = PlayerPrefs.GetString(view.name);
+                location.text = PlayerPrefs.GetString("Location:" + view.name);
             }
         }
 
