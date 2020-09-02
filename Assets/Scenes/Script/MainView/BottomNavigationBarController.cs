@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class BottomNavigationBarController : MonoBehaviour
     private GameObject[] view;
     public GameObject arCam;
     public GameObject mainCam;
+
+    WebViewObject webViewObject;
 
     private string[] viewType =
     {
@@ -39,7 +42,6 @@ public class BottomNavigationBarController : MonoBehaviour
             view.SetActive((view.name == selectedView));
         }
     }
-
 
     public void OnClick(int num)
     {

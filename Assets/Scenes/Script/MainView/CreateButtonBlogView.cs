@@ -20,6 +20,18 @@ public class MemberData
         return MemberName[num];
     }
 
+    public string getMemberSource(int num)
+    {
+        for (int i = (int)MemberSource.amaki; i < (int)MemberSource.num; i++)
+        {
+            if (Enum.GetName(typeof(MemberLineUp), num) == Enum.GetName(typeof(MemberSource), i))
+            {
+                return url + i.ToString("D2");
+            }
+        }
+        return "null";
+    }
+
     public string getMemberImageURL(int num)
     {
         return "http://www.nanabunnonijyuuni.com/assets/img/blog/thumb_photo/thumb_" + Enum.GetName(typeof(MemberLineUp), num) + ".png";
@@ -59,6 +71,8 @@ public class MemberData
     }
     
     private string[] MemberName = { "天城サリー", "海乃るり", "河瀬詩", "倉岡水巴", "西條和", "白沢かなえ", "涼花萌", "高辻麗", "武田愛奈", "帆風千春", "宮瀬玲奈" };
+
+    private string url = "http://blog.nanabunnonijyuuni.com/s/n227/diary/blog/list?ct=";
 }
 
 public class CreateButtonBlogView : MonoBehaviour
