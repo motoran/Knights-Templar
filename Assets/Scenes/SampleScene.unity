@@ -1510,6 +1510,7 @@ GameObject:
   - component: {fileID: 217898676}
   - component: {fileID: 217898677}
   - component: {fileID: 217898678}
+  - component: {fileID: 217898679}
   m_Layer: 5
   m_Name: MainView_Canvas
   m_TagString: Untagged
@@ -1589,7 +1590,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: hogehoge
+  m_Text: 
 --- !u!222 &217898669
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1737,6 +1738,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Panel: {fileID: 1852027427}
   ScllorView: {fileID: 893067565}
+--- !u!114 &217898679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217898665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e2b818419c1a445a902bd45d54c327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  locationInformationText: {fileID: 217898668}
 --- !u!1 &223974226
 GameObject:
   m_ObjectHideFlags: 0

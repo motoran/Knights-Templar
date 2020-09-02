@@ -28,6 +28,13 @@ public class SaveFoundArObj : MonoBehaviour
         {
             PlayerPrefs.SetString(ArObj.name, ArObj.name);
             PlayerPrefs.Save();
+
+            GameObject LocationInfoController = GameObject.Find("MainView_Canvas");
+            string LocationInfo = LocationInfoController.GetComponent<LocationInfoController>().LocationInfoGetter();
+            PlayerPrefs.SetString("Location", LocationInfo);
+            PlayerPrefs.Save();
+
+
             GetCollectionToast();
         }
     }
