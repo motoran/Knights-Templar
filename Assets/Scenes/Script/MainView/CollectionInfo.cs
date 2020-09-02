@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CplllectionInfo : MonoBehaviour
+public class CollectionInfo : MonoBehaviour
 {
 
     public GameObject Panel;
