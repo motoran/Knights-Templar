@@ -9,6 +9,8 @@ using muniCdAdapter;
 
 public class LocationInfoController : MonoBehaviour
 {
+    public Text locationInformationText;
+    private String Location = "";
     [Serializable]
     public class LocationResult
     {
@@ -21,8 +23,6 @@ public class LocationInfoController : MonoBehaviour
         public string muniCd;
         public string lv01Nm;
     }
-
-    public Text locationInformationText;
 
     IEnumerator Start()
     {
@@ -64,6 +64,7 @@ public class LocationInfoController : MonoBehaviour
         if (Input.location.isEnabledByUser == false)
         {
             locationInformationText.text = "位置情報取得が許可されていません";
+            Location = "";
             yield break;
         }
 
@@ -71,6 +72,7 @@ public class LocationInfoController : MonoBehaviour
         if (maxWait < 1)
         {
             locationInformationText.text = "タイムアウトによる位置情報取得エラー";
+            Location = "";
             yield break;
         }
 
@@ -78,6 +80,7 @@ public class LocationInfoController : MonoBehaviour
         if (Input.location.status == LocationServiceStatus.Failed)
         {
             locationInformationText.text = "何かしらの理由による位置情報取得エラー";
+            Location = "";
             yield break;
         }
 
@@ -89,6 +92,8 @@ public class LocationInfoController : MonoBehaviour
         if (request.isNetworkError || request.isHttpError)
         {
             locationInformationText.text = "apiエラー";
+            Location = "";
+            yield break;
         }
         else
         {
@@ -96,11 +101,16 @@ public class LocationInfoController : MonoBehaviour
 
             string muniCd = Adapter.Convert_Code_Landname((string)location_result.results.muniCd);
             string lv01Nm = (string)location_result.results.lv01Nm;
-            
-            locationInformationText.text = muniCd + lv01Nm;
+            Location = muniCd + lv01Nm;
+            locationInformationText.text = Location;
         }
 
         // 1分毎に位置情報更新
         yield return new WaitForSeconds(60);
     }
+    public String LocationInfoGetter()
+    {
+        return Location;
+    }
 }
+
