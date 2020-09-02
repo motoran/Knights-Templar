@@ -6,7 +6,7 @@ TagManager:
   tags:
   - View
   - Blog_Button
-  - ar_obj
+  - ArObj
   - MemberNameDisplay
   layers:
   - Default
