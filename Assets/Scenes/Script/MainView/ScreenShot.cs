@@ -114,6 +114,7 @@ public class ScreenShot : MonoBehaviour
     static void scanFile(string path, string mimeType)
     {
         if (Application.platform != RuntimePlatform.Android)
+
             return;
 #if UNITY_ANDROID
         using (AndroidJavaClass jcUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
