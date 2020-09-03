@@ -8,6 +8,8 @@ TagManager:
   - Blog_Button
   - ArObj
   - MemberNameDisplay
+  - BlogTitlePanel
+  - BottomNavigationBar
   layers:
   - Default
   - TransparentFX

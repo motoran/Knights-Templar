@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class BlogViewDisplay : MonoBehaviour
 {
-    private string url = "https://www.google.co.jp";
+    private string url = "http://blog.nanabunnonijyuuni.com/s/n227/diary/blog/list";
     WebViewObject webViewObject;
 
     private GameObject[] MemberNameDisplay;
+    private GameObject[] BlogTitlePanel;
+    private GameObject[] BottomNavigationBar;
     public Transform parent;
 
     MemberData memberdata = new MemberData();
@@ -21,7 +25,18 @@ public class BlogViewDisplay : MonoBehaviour
             Debug.Log(msg);
         });
         webViewObject.LoadURL(url);
-        webViewObject.SetMargins(0, 200, 0, Screen.height / 4);
+
+        BlogTitlePanel = GameObject.FindGameObjectsWithTag("BlogTitlePanel");
+        float topMargin = BlogTitlePanel[0].GetComponent<RectTransform>().sizeDelta.y;
+
+        Debug.Log("topMargin:" + topMargin);
+
+        BottomNavigationBar = GameObject.FindGameObjectsWithTag("BottomNavigationBar");
+        float bottomMargin = BottomNavigationBar[0].GetComponent<RectTransform>().sizeDelta.y;
+
+        Debug.Log("bottomMargin:" + bottomMargin);
+
+        webViewObject.SetMargins(0, (int)topMargin, 0, (int)bottomMargin);
         webViewObject.SetVisibility(false);
         webViewObject.transform.SetParent(parent);
     }
@@ -35,7 +50,7 @@ public class BlogViewDisplay : MonoBehaviour
             string url = memberdata.getMemberSource(num);
             Debug.Log(url);
 
-            MemberNameDisplay[0].GetComponent<Text>().text = memberdata.getMemberName(num) + "\n" + url;
+            MemberNameDisplay[0].GetComponent<Text>().text = memberdata.getMemberName(num);
             webViewObject.LoadURL(url);
             webViewObject.SetVisibility(true);
         }
