@@ -32,7 +32,7 @@ public class BlogViewDisplay : MonoBehaviour
         Debug.Log("topMargin:" + topMargin);
 
         BottomNavigationBar = GameObject.FindGameObjectsWithTag("BottomNavigationBar");
-        float bottomMargin = BottomNavigationBar[0].GetComponent<RectTransform>().sizeDelta.y;
+        float bottomMargin = BottomNavigationBar[0].GetComponent<RectTransform>().sizeDelta.y * BottomNavigationBar[0].GetComponent<RectTransform>().localScale.y;
 
         Debug.Log("bottomMargin:" + bottomMargin);
 
