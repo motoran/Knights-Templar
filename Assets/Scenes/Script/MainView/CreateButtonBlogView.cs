@@ -77,18 +77,24 @@ public class MemberData
 
 public class CreateButtonBlogView : MonoBehaviour
 {
-    private GameObject[] BlogButton;
+    List<GameObject> Buttons; //取得したボタンを格納する
 
     // Start is called before the first frame update
     IEnumerator Start()
     {
-        BlogButton = GameObject.FindGameObjectsWithTag("Blog_Button");
+        GameObject area = GameObject.FindGameObjectWithTag("BlogButtonArea");
+        Buttons = new List<GameObject>();
         MemberData memberdata = new MemberData();
+
+        for (int i = 0; i < area.transform.childCount; i++)
+        {
+            Buttons.Add(area.transform.GetChild(i).gameObject);
+        }
 
         // プレハブを元にオブジェクトを生成する
         for (int i = 0; i < memberdata.getNumberOfMember() ; i++)
         {
-            BlogButton[i].transform.Find("MemberName").GetComponent<Text>().text = memberdata.getMemberName(i);
+            Buttons[i].transform.Find("MemberName").GetComponent<Text>().text = memberdata.getMemberName(i);
 
             // wwwクラスのコンストラクタに画像URLを指定
             UnityWebRequest WebImage = UnityWebRequestTexture.GetTexture(memberdata.getMemberImageURL(i));
@@ -103,7 +109,7 @@ public class CreateButtonBlogView : MonoBehaviour
             }
 
             // webサーバから取得した画像をRaw Imagで表示する
-            BlogButton[i].GetComponent<RawImage>().texture = ((DownloadHandlerTexture)WebImage.downloadHandler).texture;
+            Buttons[i].GetComponent<RawImage>().texture = ((DownloadHandlerTexture)WebImage.downloadHandler).texture;
         }
     }
 
